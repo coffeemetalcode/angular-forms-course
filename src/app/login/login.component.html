@@ -2,26 +2,60 @@
   <mat-card-title>Login</mat-card-title>
   <mat-card-content>
 
-    <form class="login-form data-form">
+    <form class="login-form data-form" #loginForm="ngForm" (ngSubmit)="login(loginForm)">
 
       <mat-form-field>
 
-        <input matInput type="email" name="email"
-               placeholder="Email">
+        <input
+          [(ngModel)]="formValue.email"
+          matInput
+          type="email"
+          name="email"
+          placeholder="Email"
+          required
+          #email="ngModel">
+
+        <mat-error
+          *ngIf="email.errors?.required">Please enter a valid email address</mat-error>
 
       </mat-form-field>
 
       <mat-form-field>
 
-        <input matInput type="password" placeholder="Password">
+        <input
+          [(ngModel)]="formValue.password"
+          matInput
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+          minlength="8"
+          passwordStrength
+          #password="ngModel">
+
+        <mat-error
+          *ngIf="password.errors?.required">Please enter a password</mat-error>
+
+        <mat-error
+          *ngIf="password.errors?.minlength">Must be at least 8 characters</mat-error>
+
+        <mat-error
+          *ngIf="password.errors?.passwordStrength">Must have uppercase, lowercase, and numeric characters</mat-error>
 
       </mat-form-field>
 
-      <button mat-raised-button color="primary">
-        Login
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="!loginForm.valid">
+          Login
       </button>
 
     </form>
+
+    <div class="form-val">
+      {{ password.errors | json }}
+    </div>
 
   </mat-card-content>
 </mat-card>
